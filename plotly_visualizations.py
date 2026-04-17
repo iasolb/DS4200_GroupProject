@@ -148,27 +148,24 @@ def create_signature_drift_plotly(year15, year25):
         lambda x: (counts_15.get(x, 0) + counts_25.get(x, 0)) / 2
     )
 
-    # Create color scale
-    colors = drift["distance"].values
-
     fig = go.Figure()
 
-    # Add bars
+    # Add bars with color scale
     fig.add_trace(go.Bar(
-        x=drift.index,
+        x=list(range(len(drift))),
         y=drift["distance"],
         marker=dict(
-            color=colors,
+            color=drift["distance"],
             colorscale='RdYlGn_r',
             showscale=True,
-            colorbar=dict(title="Drift")
+            colorbar=dict(title="Drift", len=0.7),
+            line=dict(color='black', width=0.5)
         ),
-        text=drift["area"],
-        textposition='outside',
-        textangle=-60,
-        hovertemplate='<b>%{text}</b><br>' +
+        hovertemplate='<b>%{customdata}</b><br>' +
                       'Drift: %{y:.3f}<br>' +
+                      'Rank: %{x}<br>' +
                       '<extra></extra>',
+        customdata=drift["area"],
         name=''
     ))
 
@@ -178,19 +175,35 @@ def create_signature_drift_plotly(year15, year25):
         y=median,
         line_dash="dash",
         line_color="red",
+        line_width=2,
         annotation_text=f"Median: {median:.3f}",
-        annotation_position="top right"
+        annotation_position="top right",
+        annotation_font=dict(size=12, color="red")
     )
 
     fig.update_layout(
-        title="311 Signature Drift by Neighborhood",
-        title_font_size=18,
+        title={
+            'text': "311 Signature Drift by Neighborhood",
+            'x': 0.5,
+            'xanchor': 'center',
+            'font': {'size': 18, 'family': 'Arial, sans-serif'}
+        },
         xaxis_title="Neighborhoods (ranked by drift)",
         yaxis_title="Cosine Distance (2015 → 2025)",
-        height=600,
+        height=650,
         showlegend=False,
-        font=dict(family="Arial, sans-serif", size=11),
-        xaxis=dict(showticklabels=False)
+        font=dict(family="Arial, sans-serif", size=12),
+        xaxis=dict(
+            tickmode='array',
+            tickvals=list(range(len(drift))),
+            ticktext=drift["area"],
+            tickangle=60,
+            tickfont=dict(size=10),
+            automargin=True
+        ),
+        yaxis=dict(gridcolor='rgba(128,128,128,0.2)'),
+        plot_bgcolor='white',
+        margin=dict(b=150, t=80, l=80, r=80)
     )
 
     fig.write_html('figures/signature_drift.html')
@@ -264,6 +277,137 @@ def create_cluster_comparison_plotly(year15, year25):
     return fig, labels_15, labels_25
 
 
+def create_composition_bars_plotly(year15, year25):
+    """Interactive composition bars with color legend"""
+    print("Creating interactive composition bars...")
+
+    # Clean data
+    data15 = year15.data[
+        year15.data["neighborhood"].notna() &
+        (year15.data["neighborhood"].str.strip() != "")
+    ].copy()
+
+    data25 = year25.data[
+        year25.data["neighborhood"].notna() &
+        (year25.data["neighborhood"].str.strip() != "")
+    ].copy()
+
+    # Get top 6 neighborhoods
+    top_neighborhoods = data15["neighborhood"].value_counts().head(6).index.tolist()
+
+    # Build data for all neighborhoods
+    data_list = []
+
+    for hood in top_neighborhoods:
+        hood_15 = data15[data15["neighborhood"] == hood]
+        hood_25 = data25[data25["neighborhood"] == hood]
+
+        # Get top 5 combined types for this neighborhood
+        combined = pd.concat([hood_15["type"], hood_25["type"]])
+        top_types = combined.value_counts().head(5).index.tolist()
+
+        for req_type in top_types:
+            count_15 = (hood_15["type"] == req_type).sum()
+            count_25 = (hood_25["type"] == req_type).sum()
+
+            if count_15 > 0:
+                data_list.append({
+                    "Neighborhood": hood,
+                    "Request Type": clean_request_type_name(req_type),
+                    "Count": count_15,
+                    "Year": "2015"
+                })
+
+            if count_25 > 0:
+                data_list.append({
+                    "Neighborhood": hood,
+                    "Request Type": clean_request_type_name(req_type),
+                    "Count": count_25,
+                    "Year": "2025"
+                })
+
+    df = pd.DataFrame(data_list)
+
+    # Create subplots for each neighborhood
+    fig = make_subplots(
+        rows=2, cols=3,
+        subplot_titles=top_neighborhoods,
+        horizontal_spacing=0.12,
+        vertical_spacing=0.15
+    )
+
+    colors = {'2015': '#4C72B0', '2025': '#DD8452'}
+
+    for idx, hood in enumerate(top_neighborhoods):
+        row = idx // 3 + 1
+        col = idx % 3 + 1
+
+        hood_df = df[df["Neighborhood"] == hood]
+
+        # Add 2015 bars
+        data_2015 = hood_df[hood_df["Year"] == "2015"]
+        fig.add_trace(
+            go.Bar(
+                y=data_2015["Request Type"],
+                x=data_2015["Count"],
+                name='2015',
+                marker_color=colors['2015'],
+                orientation='h',
+                showlegend=(idx == 0),  # Only show legend once
+                hovertemplate='<b>%{y}</b><br>2015: %{x} requests<extra></extra>'
+            ),
+            row=row, col=col
+        )
+
+        # Add 2025 bars
+        data_2025 = hood_df[hood_df["Year"] == "2025"]
+        fig.add_trace(
+            go.Bar(
+                y=data_2025["Request Type"],
+                x=data_2025["Count"],
+                name='2025',
+                marker_color=colors['2025'],
+                orientation='h',
+                showlegend=(idx == 0),
+                hovertemplate='<b>%{y}</b><br>2025: %{x} requests<extra></extra>'
+            ),
+            row=row, col=col
+        )
+
+    fig.update_layout(
+        title={
+            'text': "How Neighborhood Request Patterns Changed: 2015 vs 2025",
+            'x': 0.5,
+            'xanchor': 'center',
+            'font': {'size': 18, 'family': 'Arial, sans-serif'}
+        },
+        height=800,
+        font=dict(family="Arial, sans-serif", size=11),
+        barmode='group',
+        legend=dict(
+            title=dict(text="Year", font=dict(size=13)),
+            orientation="h",
+            yanchor="bottom",
+            y=1.02,
+            xanchor="center",
+            x=0.5,
+            font=dict(size=12)
+        ),
+        margin=dict(l=150, r=50, t=120, b=60)
+    )
+
+    # Update all x-axes
+    for i in range(1, 7):
+        row = (i - 1) // 3 + 1
+        col = (i - 1) % 3 + 1
+        fig.update_xaxes(title_text="Requests", row=row, col=col)
+
+    fig.write_html('figures/composition_bars.html')
+    print("Saved: figures/composition_bars.html")
+
+    return fig
+
+
 def main():
     """Generate all interactive HTML visualizations"""
     print("Loading data...")
@@ -280,8 +424,13 @@ def main():
     create_monthly_heatmap_plotly(year15, year25)
     create_signature_drift_plotly(year15, year25)
     create_cluster_comparison_plotly(year15, year25)
+    create_composition_bars_plotly(year15, year25)  # Added!
 
     print("\nAll interactive visualizations saved to figures/!")
+
+
+if __name__ == "__main__":
+    main()
 
 
 if __name__ == "__main__":
