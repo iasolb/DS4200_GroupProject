@@ -50,7 +50,7 @@ def create_monthly_heatmap_plotly(year15, year25):
     fig = make_subplots(
         rows=1, cols=2,
         subplot_titles=('2015', '2025'),
-        horizontal_spacing=0.15
+        horizontal_spacing=0.12
     )
 
     # 2015 heatmap
@@ -61,8 +61,8 @@ def create_monthly_heatmap_plotly(year15, year25):
             y=monthly_15_filtered.index,
             colorscale='YlOrRd',
             showscale=True,
-            hovertemplate='<b>%{y}</b><br>%{x}<br>Requests: %{z}<extra></extra>',
-            colorbar=dict(title="Requests", x=0.45)
+            hovertemplate='<b>%{y}</b><br>%{x}<br>Requests: %{z:.0f}<extra></extra>',
+            colorbar=dict(title="Requests", x=0.46, len=0.8)
         ),
         row=1, col=1
     )
@@ -75,23 +75,51 @@ def create_monthly_heatmap_plotly(year15, year25):
             y=monthly_25_filtered.index,
             colorscale='YlOrRd',
             showscale=True,
-            hovertemplate='<b>%{y}</b><br>%{x}<br>Requests: %{z}<extra></extra>',
-            colorbar=dict(title="Requests", x=1.02)
+            hovertemplate='<b>%{y}</b><br>%{x}<br>Requests: %{z:.0f}<extra></extra>',
+            colorbar=dict(title="Requests", x=1.0, len=0.8)
         ),
         row=1, col=2
     )
 
     fig.update_layout(
-        title_text="Seasonal Patterns in Boston 311 Requests",
-        title_font_size=18,
-        height=500,
-        font=dict(family="Arial, sans-serif", size=12)
+        title={
+            'text': "Seasonal Patterns in Boston 311 Requests",
+            'x': 0.5,
+            'xanchor': 'center',
+            'font': {'size': 18, 'family': 'Arial, sans-serif'}
+        },
+        height=600,
+        font=dict(family="Arial, sans-serif", size=12),
+        margin=dict(l=180, r=100, t=100, b=80)
     )
 
-    fig.update_xaxes(title_text="Month", tickangle=45, row=1, col=1)
-    fig.update_xaxes(title_text="Month", tickangle=45, row=1, col=2)
-    fig.update_yaxes(title_text="Request Type", row=1, col=1)
-    fig.update_yaxes(title_text="Request Type", row=1, col=2)
+    # Update x-axes
+    fig.update_xaxes(
+        title_text="Month",
+        tickangle=45,
+        tickfont=dict(size=11),
+        row=1, col=1
+    )
+    fig.update_xaxes(
+        title_text="Month",
+        tickangle=45,
+        tickfont=dict(size=11),
+        row=1, col=2
+    )
+
+    # Update y-axes with better spacing
+    fig.update_yaxes(
+        title_text="Request Type",
+        tickfont=dict(size=10),
+        automargin=True,
+        row=1, col=1
+    )
+    fig.update_yaxes(
+        title_text="Request Type",
+        tickfont=dict(size=10),
+        automargin=True,
+        row=1, col=2
+    )
 
     fig.write_html('figures/monthly_heatmap.html')
     print("Saved: figures/monthly_heatmap.html")
