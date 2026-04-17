@@ -353,7 +353,12 @@
 
             <div class="visualization">
                 <h3>Figure 1: Seasonal Patterns in 311 Requests</h3>
-                <img src="figures/monthly_heatmap.png" alt="Monthly heatmap of 311 requests">
+                <iframe src="figures/monthly_heatmap.html"
+                        width="100%"
+                        height="600"
+                        frameborder="0"
+                        style="border: 1px solid #dee2e6;">
+                </iframe>
                 <p>
                     The heatmap displays monthly request volumes by type for 2015 and 2025, revealing pronounced seasonal patterns. 
                     Snow removal requests demonstrate expected winter concentration, while infrastructure concerns such as street lighting 
@@ -379,7 +384,12 @@
 
             <div class="visualization">
                 <h3>Figure 3: Neighborhood Signature Drift Quantification</h3>
-                <img src="figures/signature_drift.png" alt="Neighborhood signature drift">
+                <iframe src="figures/signature_drift.html"
+                        width="100%"
+                        height="650"
+                        frameborder="0"
+                        style="border: 1px solid #dee2e6;">
+                </iframe>
                 <p>
                     This analysis quantifies change magnitude for each neighborhood using cosine distance between 2015 and 2025 signature 
                     vectors. Neighborhoods are rank-ordered by drift magnitude. East Boston, South Boston/Waterfront, and South Boston 
@@ -423,8 +433,11 @@
 
             <div class="visualization">
                 <h3>Figure 6: Tract-Level Socioeconomic Validation</h3>
-                <iframe src="figures/tract_d3_scatter.html" width="100%" height="700" frameborder="0"
-                    style="border: 1px solid #dee2e6;">
+                <iframe src="figures/tract_d3_scatter.html" 
+                        width="100%" 
+                        height="700" 
+                        frameborder="0"
+                        style="border: 1px solid #dee2e6;">
                 </iframe>
                 <p>
                     This D3 scatter plot compares tract-level poverty rates to complaint change outcomes. The y-axis can
