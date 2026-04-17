@@ -381,26 +381,27 @@ def create_composition_bars_plotly(year15, year25):
             'xanchor': 'center',
             'font': {'size': 18, 'family': 'Arial, sans-serif'}
         },
-        height=800,
-        font=dict(family="Arial, sans-serif", size=11),
+        height=900,
+        font=dict(family="Arial, sans-serif", size=10),
         barmode='group',
         legend=dict(
             title=dict(text="Year", font=dict(size=13)),
             orientation="h",
             yanchor="bottom",
-            y=1.02,
+            y=1.01,
             xanchor="center",
             x=0.5,
             font=dict(size=12)
         ),
-        margin=dict(l=150, r=50, t=120, b=60)
+        margin=dict(l=200, r=50, t=120, b=60)
     )
 
-    # Update all x-axes
+    # Update all axes with better spacing
     for i in range(1, 7):
         row = (i - 1) // 3 + 1
         col = (i - 1) % 3 + 1
-        fig.update_xaxes(title_text="Requests", row=row, col=col)
+        fig.update_xaxes(title_text="Requests", tickfont=dict(size=10), row=row, col=col)
+        fig.update_yaxes(tickfont=dict(size=9), automargin=True, row=row, col=col)
 
     fig.write_html('figures/composition_bars.html')
     print("Saved: figures/composition_bars.html")
