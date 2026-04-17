@@ -96,6 +96,12 @@
             margin-bottom: 1rem;
         }
 
+        h4 {
+            color: #2c3e50;
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+
         p {
             margin-bottom: 1rem;
             text-align: justify;
@@ -351,7 +357,6 @@
         <section id="visualizations">
             <h2>Visualizations</h2>
 
-            <!-- REORDERED PER PROFESSOR FEEDBACK -->
             <!-- Figure 1: Signature Drift - "changes in past 10 years" -->
             <div class="visualization">
                 <h3>Figure 1: Neighborhood Signature Drift Quantification</h3>
@@ -367,26 +372,36 @@
             <!-- Figure 2: Interactive Map - "area changes" -->
             <div class="visualization">
                 <h3>Figure 2: Interactive Side-by-Side Geographic Map</h3>
+                <div style="display: flex; gap: 1rem;">
+                    <div style="flex: 1;">
+                        <h4 style="text-align: center; font-size: 1.1rem; margin-bottom: 0.5rem;">2015</h4>
+                        <iframe src="figures/map_2015.html"
+                                width="100%"
+                                height="500"
+                                frameborder="0"
+                                style="border: 1px solid #dee2e6;">
+                        </iframe>
+                    </div>
+                    <div style="flex: 1;">
+                        <h4 style="text-align: center; font-size: 1.1rem; margin-bottom: 0.5rem;">2025</h4>
+                        <iframe src="figures/map_2025.html"
+                                width="100%"
+                                height="500"
+                                frameborder="0"
+                                style="border: 1px solid #dee2e6;">
+                        </iframe>
+                    </div>
+                </div>
                 <p>
-                    <strong>Interactive Dash Application:</strong> This visualization displays 2015 and 2025 311 request locations 
-                    side-by-side using Folium maps with marker clustering. Users can filter by neighborhood and request type through 
-                    dropdown menus in the left sidebar. Maps update dynamically to show filtered results, enabling direct spatial 
-                    comparison across the decade.
+                    Side-by-side Folium maps display 2015 and 2025 311 request locations with marker clustering for performance optimization.
+                    Click markers to view case details including request type and location. Zoom and pan to explore spatial distribution 
+                    patterns across Boston neighborhoods. This visualization enables direct geographic comparison of request density and 
+                    spatial patterns across the decade.
                 </p>
-                <p>
-                    <strong>How to Access:</strong> Execute <code>python map_app.py</code> from the project directory, then navigate to 
-                    <code>http://localhost:8050</code> in your browser.
+                <p style="font-style: italic; font-size: 0.95rem; color: #6c757d;">
+                    Note: For advanced filtering by neighborhood and request type, execute <code>python map_app.py</code> to access 
+                    the full interactive Dash application.
                 </p>
-                <p>
-                    <strong>Interaction Features:</strong> 
-                </p>
-                <ul>
-                    <li>Dropdown filtering by neighborhood (left sidebar)</li>
-                    <li>Dropdown filtering by request type (updates based on neighborhood selection)</li>
-                    <li>Marker clustering automatically groups nearby requests for better performance</li>
-                    <li>Click markers to view case details and location information</li>
-                    <li>Synchronized side-by-side view enables direct 2015 vs 2025 comparison</li>
-                </ul>
             </div>
 
             <!-- Figure 3: Composition Bars - "area difference" -->
@@ -394,14 +409,15 @@
                 <h3>Figure 3: Neighborhood Request Composition Analysis</h3>
                 <iframe src="figures/composition_bars.html"
                         width="100%"
-                        height="700"
+                        height="850"
                         frameborder="0"
                         style="border: 1px solid #dee2e6;">
                 </iframe>
                 <p>
                     Horizontal bar charts compare the top five request types for Boston's six highest-volume neighborhoods. Blue bars 
-                    represent 2015 data; orange bars represent 2025. The visualization demonstrates heterogeneity in neighborhood priorities 
-                    and documents compositional shifts occurring over the decade-long study period.
+                    represent 2015 data; orange bars represent 2025. The color legend at the top indicates year assignment. The visualization 
+                    demonstrates heterogeneity in neighborhood priorities and documents compositional shifts occurring over the decade-long 
+                    study period. Hover over bars to view exact request counts.
                 </p>
             </div>
 
