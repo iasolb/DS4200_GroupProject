@@ -44,52 +44,70 @@
             background: rgba(255,255,255,0.1);
         }
 
-        header {
-            background: linear-gradient(135deg, #1a1a1a 0%, #2c3e50 100%);
-            color: white;
-            padding: 5rem 2rem 4rem 2rem;
-            text-align: center;
-        }
+header {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    color: white;
+    padding: 5rem 2rem 4rem 2rem;
+    text-align: center;
+    border-bottom: 4px solid #3498db;
+}
 
-        header h1 {
-            font-size: 2.5rem;
-            font-weight: 400;
-            letter-spacing: 0.5px;
-            margin-bottom: 1rem;
-        }
+header h1 {
+    font-size: 2.8rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    margin-bottom: 1.2rem;
+    line-height: 1.2;
+}
 
-        header p {
-            font-size: 1.2rem;
-            font-weight: 300;
-            opacity: 0.95;
-            max-width: 800px;
-            margin: 0 auto 2rem;
-        }
+header p {
+    font-size: 1.15rem;
+    font-weight: 300;
+    color: #cbd5e0;
+    max-width: 700px;
+    margin: 0 auto 2.5rem;
+    line-height: 1.8;
+}
 
-        .team-members {
-            display: flex;
-            justify-content: center;
-            gap: 2rem;
-            margin-top: 2rem;
-            font-size: 1rem;
-        }
+.team-members {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 2rem;
+    font-size: 1rem;
+    flex-wrap: wrap;
+}
 
-        .team-members span::before {
-            content: '';
-        }
+.team-members span {
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.15);
+    padding: 0.4rem 1.2rem;
+    border-radius: 20px;
+    font-weight: 400;
+    letter-spacing: 0.3px;
+}
 
-        .stats-banner {
-            display: flex;
-            justify-content: center;
-            gap: 3rem;
-            margin-top: 2rem;
-            font-size: 0.95rem;
-            opacity: 0.9;
-        }
+.stats-banner {
+    display: flex;
+    justify-content: center;
+    gap: 0;
+    margin-top: 2.5rem;
+    flex-wrap: wrap;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    padding-top: 2rem;
+}
 
-        .stats-banner span::before {
-            content: '';
-        }
+.stats-banner span {
+    padding: 0.5rem 2.5rem;
+    font-size: 0.95rem;
+    color: #a0aec0;
+    border-right: 1px solid rgba(255,255,255,0.15);
+    letter-spacing: 0.5px;
+}
+
+.stats-banner span:last-child {
+    border-right: none;
+}
 
         .container {
             max-width: 1100px;
@@ -382,7 +400,7 @@
             
             <h4>Why 311 Data?</h4>
             <p>
-                Municipal 311 systems provide a comprehensive, publicly available record of non-emergency issues reported by residents—from potholes 
+                Municipal 311 systems provide a comprehensive, publicly available record of non-emergency issues reported by residents-from potholes 
                 and streetlight outages to code violations and trash complaints. Because these requests are georeferenced and timestamped, they 
                 offer a high-resolution lens into neighborhood conditions and priorities. Research shows that the structure of 311 requests serves 
                 as a meaningful signature of local socioeconomic context.
@@ -473,7 +491,7 @@
                 <img src="figures/signature_drift.png" alt="Signature drift analysis">
                 
                 <div class="takeaway">
-                    <strong>Takeaway:</strong> East Boston, South Boston/Waterfront, and South Boston show the highest drift values—consistent 
+                    <strong>Takeaway:</strong> East Boston, South Boston/Waterfront, and South Boston show the highest drift values-consistent 
                     with rapid Seaport development and gentrification. The median line helps identify neighborhoods experiencing above-average transformation.
                 </div>
                 
@@ -530,7 +548,7 @@
                     Compare patterns across the six highest-volume neighborhoods.
                 </div>
                 
-                <iframe src="figures/composition_bars.html" width="100%" height="900" frameborder="0" style="border: 1px solid #dee2e6;"></iframe>
+                <iframe src="figures/composition_bars.html" width="100%" height="1450" frameborder="0" style="border: 1px solid #dee2e6;"></iframe>
                 
                 <div class="takeaway">
                     <strong>Takeaway:</strong> Neighborhoods show distinct request profiles. Some prioritize trash/recycling complaints while 
@@ -601,7 +619,8 @@
                     changed between 2015 and 2025.
                 </div>
                 
-                <iframe src="figures/cluster_comparison.html" width="100%" height="600" frameborder="0" style="border: 1px solid #dee2e6;"></iframe>
+                <iframe src="figures/cluster_profiles_2015.html" width="100%" height="1150px" frameborder="0"></iframe>
+                <iframe src="figures/cluster_profiles_2025.html" width="100%" height="1050px" frameborder="0"></iframe>
                 
                 <div class="takeaway">
                     <strong>Takeaway:</strong> Neighborhood redistribution across clusters indicates systematic reorganization of Boston's 
@@ -653,7 +672,7 @@
                 <div class="finding-box">
                     <h4>Uneven Transformation</h4>
                     <p>
-                        East Boston, South Boston/Waterfront, and South Boston show especially large signature shifts—consistent with rapid 
+                        East Boston, South Boston/Waterfront, and South Boston show especially large signature shifts-consistent with rapid 
                         Seaport development and gentrification pressures documented in these areas.
                     </p>
                 </div>
@@ -700,7 +719,7 @@
     </div>
 
     <footer>
-        <p><strong>DS4200 — Information Presentation & Visualization</strong></p>
+        <p><strong>DS4200 - Information Presentation & Visualization</strong></p>
         <p>Group Project · Anthony Campos · Cassandra Cinzori · Ian Solberg · Northeastern University</p>
         <p style="margin-top: 1rem; opacity: 0.7;">Built with Python, Altair, D3.js, Plotly & Dash</p>
     </footer>

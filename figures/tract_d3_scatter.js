@@ -54,14 +54,14 @@ const yAxis = root.append('g').attr('class', 'axis');
 
 const plot = root.append('g');
 
-    root.append('text')
-        .attr('x', width / 2)
-        .attr('y', height + 52)
-        .attr('text-anchor', 'middle')
-        .attr('font-size', 14)
-        .attr('font-weight', 600)
-        .attr('fill', '#2c3e50')
-        .text('Poverty rate');
+root.append('text')
+    .attr('x', width / 2)
+    .attr('y', height + 52)
+    .attr('text-anchor', 'middle')
+    .attr('font-size', 14)
+    .attr('font-weight', 600)
+    .attr('fill', '#2c3e50')
+    .text('Poverty rate');
 
 const yLabel = root.append('text')
     .attr('transform', 'rotate(-90)')
@@ -105,21 +105,21 @@ function renderMeta(config, valueAccessor) {
 
     if (!selected) {
         metaLine.html(`
-      <div><strong>Source:</strong> data/census_tract_ses_2023_with_311.csv</div>
-      <div><strong>Observations:</strong> ${formatNumber(data.length)} tracts</div>
-      <div><strong>Mean ${config.label}:</strong> ${config.format(d3.mean(data, valueAccessor))}</div>
-      <div><strong>Click:</strong> pin a tract</div>
-    `);
+            <div><strong>Source:</strong> data/census_tract_ses_2023_with_311.csv</div>
+            <div><strong>Observations:</strong> ${formatNumber(data.length)} tracts</div>
+            <div><strong>Mean ${config.label}:</strong> ${config.format(d3.mean(data, valueAccessor))}</div>
+            <div><strong>Click:</strong> pin a tract</div>
+        `);
         return;
     }
 
     metaLine.html(`
-    <div><strong>Selected tract:</strong> ${selected.label}</div>
-    <div><strong>Poverty rate:</strong> ${formatPercent(selected.povertyRate)}</div>
-    <div><strong>${config.label}:</strong> ${config.format(valueAccessor(selected))}</div>
-    <div><strong>Median income:</strong> ${formatIncome(selected.income)}</div>
-    <div><strong>Population:</strong> ${formatNumber(selected.population)}</div>
-  `);
+        <div><strong>Selected tract:</strong> ${selected.label}</div>
+        <div><strong>Poverty rate:</strong> ${formatPercent(selected.povertyRate)}</div>
+        <div><strong>${config.label}:</strong> ${config.format(valueAccessor(selected))}</div>
+        <div><strong>Median income:</strong> ${formatIncome(selected.income)}</div>
+        <div><strong>Population:</strong> ${formatNumber(selected.population)}</div>
+    `);
 }
 
 function render() {
@@ -150,6 +150,56 @@ function render() {
     yGrid.call(d3.axisLeft(yScale).tickSize(-width).tickFormat('').ticks(8));
     yLabel.text(config.label);
 
+    // --- Regression line ---
+    const validData = data.filter(d =>
+        Number.isFinite(d.povertyRate) && Number.isFinite(valueAccessor(d))
+    );
+    const meanX = d3.mean(validData, d => d.povertyRate);
+    const meanY = d3.mean(validData, valueAccessor);
+    const ssXY = d3.sum(validData, d => (d.povertyRate - meanX) * (valueAccessor(d) - meanY));
+    const ssXX = d3.sum(validData, d => (d.povertyRate - meanX) ** 2);
+    const ssYY = d3.sum(validData, d => (valueAccessor(d) - meanY) ** 2);
+    const slope = ssXX !== 0 ? ssXY / ssXX : 0;
+    const intercept = meanY - slope * meanX;
+    const r = ssXX > 0 && ssYY > 0 ? ssXY / Math.sqrt(ssXX * ssYY) : 0;
+
+    const xMin = xScale.domain()[0];
+    const xMax = xScale.domain()[1];
+    const yAtXMin = slope * xMin + intercept;
+    const yAtXMax = slope * xMax + intercept;
+
+    // Draw regression line behind points
+    plot.selectAll('.reg-line').data([null])
+        .join(
+            enter => enter.append('line').attr('class', 'reg-line'),
+            update => update
+        )
+        .attr('stroke', '#e74c3c')
+        .attr('stroke-width', 2)
+        .attr('stroke-dasharray', '6,3')
+        .attr('opacity', 0.8)
+        .transition().duration(700)
+        .attr('x1', xScale(xMin))
+        .attr('y1', yScale(yAtXMin))
+        .attr('x2', xScale(xMax))
+        .attr('y2', yScale(yAtXMax));
+
+    // r value label near right end of line
+    plot.selectAll('.reg-label').data([null])
+        .join(
+            enter => enter.append('text').attr('class', 'reg-label'),
+            update => update
+        )
+        .transition().duration(700)
+        .attr('x', xScale(xMax) - 8)
+        .attr('y', yScale(yAtXMax) - 10)
+        .attr('text-anchor', 'end')
+        .attr('font-size', 12)
+        .attr('font-weight', 600)
+        .attr('fill', '#e74c3c')
+        .text(`r = ${d3.format('.2f')(r)}`);
+
+    // --- Points drawn after regression line so they sit on top ---
     const points = plot.selectAll('circle').data(data, d => d.GEO_ID);
 
     points.join(
@@ -165,12 +215,12 @@ function render() {
                 if (pinnedId && pinnedId !== d.GEO_ID) return;
                 d3.select(this).attr('stroke', '#1a1a1a').attr('stroke-width', 2.5);
                 tooltip.style('opacity', 1).html(`
-          <strong>${d.label}</strong><br>
-          Poverty rate: ${formatPercent(d.povertyRate)}<br>
-          ${config.label}: ${config.format(valueAccessor(d))}<br>
-          Median income: ${formatIncome(d.income)}<br>
-          Population: ${formatNumber(d.population)}
-        `);
+                    <strong>${d.label}</strong><br>
+                    Poverty rate: ${formatPercent(d.povertyRate)}<br>
+                    ${config.label}: ${config.format(valueAccessor(d))}<br>
+                    Median income: ${formatIncome(d.income)}<br>
+                    Population: ${formatNumber(d.population)}
+                `);
             })
             .on('mousemove', function (event) {
                 tooltip.style('left', `${event.pageX + 16}px`).style('top', `${event.pageY - 18}px`);
@@ -189,19 +239,17 @@ function render() {
                     tooltip.style('opacity', 0);
                     return;
                 }
-
                 pinnedId = d.GEO_ID;
                 plot.selectAll('circle')
                     .classed('highlight', node => node.GEO_ID === d.GEO_ID)
                     .attr('opacity', node => node.GEO_ID === d.GEO_ID ? 1 : 0.18);
-
                 tooltip.style('opacity', 1).html(`
-          <strong>${d.label}</strong><br>
-          Poverty rate: ${formatPercent(d.povertyRate)}<br>
-          ${config.label}: ${config.format(valueAccessor(d))}<br>
-          Median income: ${formatIncome(d.income)}<br>
-          Population: ${formatNumber(d.population)}
-        `);
+                    <strong>${d.label}</strong><br>
+                    Poverty rate: ${formatPercent(d.povertyRate)}<br>
+                    ${config.label}: ${config.format(valueAccessor(d))}<br>
+                    Median income: ${formatIncome(d.income)}<br>
+                    Population: ${formatNumber(d.population)}
+                `);
                 renderMeta(config, valueAccessor);
             })
             .call(enter => enter.transition().duration(700)
