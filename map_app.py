@@ -1,3 +1,13 @@
+"""
+map_app.py - Interactive geographic visualization for Boston 311 Service Requests
+DS4200 Group Project: Mapping Urban Change Through 311 Service Requests (2015 vs 2025)
+
+This module provides:
+- A Dash web application displaying side-by-side Folium maps for 2015 and 2025
+- Neighborhood and request type dropdown filters that update both maps simultaneously
+- MarkerCluster rendering for up to 5,000 sampled requests per year
+"""
+
 from dash import Dash, html, dcc, callback, Output, Input
 import folium
 from folium.plugins import MarkerCluster

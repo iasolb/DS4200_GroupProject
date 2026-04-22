@@ -9,3 +9,4 @@ altair
 vl-convert-python
 scipy
 scikit-learn
+plotly
