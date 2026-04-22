@@ -1,11 +1,34 @@
+"""
+api311.py - Core data loading and summarization for Boston 311 Service Request Analysis
+DS4200 Group Project: Mapping Urban Change Through 311 Service Requests (2015 vs 2025)
+
+This module provides:
+- clean_request_type_name: Standardizes verbose request type labels for display
+- Year: Main data class for loading, spatial processing, and summarizing 311 data
+    - make_points()     : Convert lat/lon to GeoDataFrame geometry
+    - get_subset()      : Filter data by column values
+    - summarize()       : Generate descriptive stats, monthly counts, and signatures
+"""
+
+import calendar
 import pandas as pd
 import geopandas as gpd
-
-from dash import Dash, html, dcc
-import dash_leaflet as dl
 from typing import Optional
 from signatures import SignatureAnalyzer
 
+def clean_request_type_name(name: str) -> str:
+    """Make request type names more readable"""
+    replacements = {
+        "Missed Trash/Recycling/Yard Waste/Bulk Item": "Missed Trash/Recycling",
+        "Request for Snow Plowing": "Snow Plowing",
+        "Request for Pothole Repair": "Pothole Repair",
+        "Street Light Outages": "Street Lights",
+        "Pothole Repair (Internal)": "Pothole (Internal)",
+        "Poor Conditions of Property": "Poor Property Conditions",
+        "Improper Storage of Trash (Barrels)": "Improper Trash Storage",
+        "Parks Lighting/Electrical Issues": "Parks Lighting",
+    }
+    return replacements.get(name, name)
 
 class Year:
     def __init__(self, fp: str):

@@ -3,7 +3,6 @@ plotly_visualizations.py - Create interactive HTML visualizations with hover too
 Converts matplotlib static visualizations to interactive Plotly versions
 """
 
-from api311 import Year
 from signatures import SignatureAnalyzer
 from sklearn.cluster import KMeans
 import plotly.graph_objects as go
@@ -11,21 +10,7 @@ import plotly.express as px
 from plotly.subplots import make_subplots
 import pandas as pd
 import numpy as np
-
-
-def clean_request_type_name(name):
-    """Make request type names more readable"""
-    replacements = {
-        'Missed Trash/Recycling/Yard Waste/Bulk Item': 'Missed Trash/Recycling',
-        'Request for Snow Plowing': 'Snow Plowing',
-        'Request for Pothole Repair': 'Pothole Repair',
-        'Street Light Outages': 'Street Lights',
-        'Pothole Repair (Internal)': 'Pothole (Internal)',
-        'Poor Conditions of Property': 'Poor Property Conditions',
-        'Improper Storage of Trash (Barrels)': 'Improper Trash Storage',
-        'Parks Lighting/Electrical Issues': 'Parks Lighting',
-    }
-    return replacements.get(name, name)
+from api311 import Year, clean_request_type_name
 
 
 def create_monthly_heatmap_plotly(year15, year25):

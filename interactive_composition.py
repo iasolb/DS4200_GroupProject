@@ -3,25 +3,9 @@ interactive_composition.py - Interactive Neighborhood Request Pattern Comparison
 Creates an Altair visualization allowing users to compare neighborhoods and years
 """
 
-from api311 import Year
 import altair as alt
 import pandas as pd
-
-
-def clean_request_type_name(name):
-    """Make request type names more readable"""
-    replacements = {
-        'Missed Trash/Recycling/Yard Waste/Bulk Item': 'Missed Trash/Recycling',
-        'Request for Snow Plowing': 'Snow Plowing',
-        'Request for Pothole Repair': 'Pothole Repair',
-        'Street Light Outages': 'Street Lights',
-        'Pothole Repair (Internal)': 'Pothole (Internal)',
-        'Poor Conditions of Property': 'Poor Property Conditions',
-        'Improper Storage of Trash (Barrels)': 'Improper Trash Storage',
-        'Parks Lighting/Electrical Issues': 'Parks Lighting',
-    }
-    return replacements.get(name, name)
-
+from api311 import Year, clean_request_type_name
 
 def create_interactive_comparison(year15, year25):
     """
@@ -186,7 +170,7 @@ def main():
 
     # Save as HTML
     chart.save('interactive_neighborhood_comparison.html')
-    print("\n✅ Saved: interactive_neighborhood_comparison.html")
+    print("\nSaved: interactive_neighborhood_comparison.html")
     print("\nOpen this file in your browser to interact with it!")
 
     # Also display if running in Jupyter
