@@ -129,11 +129,17 @@
     <div class='page'>
         <h1>Tract-Level Socioeconomic Validation</h1>
         <p>
-            A simple D3 scatterplot that connects tract poverty rates to complaint outcomes. Hover a point for details
-            and click it to pin the highlight. Use the dropdown to switch the response metric.
+            A D3 scatterplot that connects tract-level socioeconomic indicators to complaint outcomes. Hover a point for
+            details and click it to pin the highlight. Use the dropdowns to switch the predictor and response metric.
         </p>
 
         <div class='controls'>
+            <label for='x-metric-select'>X-axis metric</label>
+            <select id='x-metric-select'>
+                <option value='poverty_rate'>Poverty rate</option>
+                <option value='median_household_income'>Median household income</option>
+            </select>
+
             <label for='metric-select'>Y-axis metric</label>
             <select id='metric-select'>
                 <option value='complaint_change_per_1k'>Complaint change per 1k residents</option>
