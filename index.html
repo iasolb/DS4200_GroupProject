@@ -130,7 +130,7 @@ header p {
             border-bottom: 3px solid #3498db;
             position: relative;
         }
-        
+
         h2::after {
             content: '';
             position: absolute;
@@ -177,7 +177,7 @@ header p {
             text-align: center;
             transition: transform 0.2s, box-shadow 0.2s;
         }
-        
+
         .stat-box:hover {
             transform: translateY(-5px);
             box-shadow: 0 8px 16px rgba(0,0,0,0.1);
@@ -246,6 +246,19 @@ header p {
         .design-note::before {
             content: '';
             font-weight: bold;
+        }
+
+        .link-row {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 0.75rem 0 1.5rem;
+        }
+
+        .link-row a {
+            font-size: 0.95rem;
+            font-weight: 600;
         }
 
         .visualization img {
@@ -397,38 +410,38 @@ header p {
     <div class="container">
         <section id="intro">
             <h2>Overview</h2>
-            
+
             <h4>Why 311 Data?</h4>
             <p>
-                Municipal 311 systems provide a comprehensive, publicly available record of non-emergency issues reported by residents-from potholes 
-                and streetlight outages to code violations and trash complaints. Because these requests are georeferenced and timestamped, they 
-                offer a high-resolution lens into neighborhood conditions and priorities. Research shows that the structure of 311 requests serves 
+                Municipal 311 systems provide a comprehensive, publicly available record of non-emergency issues reported by residents, from potholes
+                and streetlight outages to code violations and trash complaints. Because these requests are georeferenced and timestamped, they
+                offer a high-resolution lens into neighborhood conditions and priorities. Research shows that the structure of 311 requests serves
                 as a meaningful signature of local socioeconomic context.
             </p>
 
             <p>
-                Wang et al. (2017) demonstrated that clustering neighborhoods by their 311 request patterns produces groups with distinctly 
-                different income, education, and demographic profiles. By comparing these "signatures" across a decade, we identify neighborhoods 
+                Wang et al. (2017) demonstrated that clustering neighborhoods by their 311 request patterns produces groups with distinctly
+                different income, education, and demographic profiles. By comparing these "signatures" across a decade, we identify neighborhoods
                 experiencing significant transformation through gentrification, infrastructure investment, or emerging distress patterns.
             </p>
 
             <p>
-                The 2015-2025 period represents a transformative decade for Boston, characterized by substantial Seaport District development, 
-                accelerated gentrification in historically lower-income neighborhoods like Roxbury and Dorchester, and increased climate-related 
-                infrastructure challenges. This project quantifies which neighborhoods changed most dramatically and interprets what those changes 
+                The 2015-2025 period represents a transformative decade for Boston, characterized by substantial Seaport District development,
+                accelerated gentrification in historically lower-income neighborhoods like Roxbury and Dorchester, and increased climate-related
+                infrastructure challenges. This project quantifies which neighborhoods changed most dramatically and interprets what those changes
                 mean for Boston's urban landscape.
             </p>
 
             <h4>References</h4>
             <div class="references">
                 <p>
-                    <strong>1.</strong> Li, Y., Hyder, A., Southerland, L.T., Hammond, G., Porr, A., & Miller, H.J. (2020). 311 service requests as indicators 
-                    of neighborhood distress and opioid use disorder. <em>Scientific Reports</em>, 10, 19579. 
+                    <strong>1.</strong> Li, Y., Hyder, A., Southerland, L.T., Hammond, G., Porr, A., & Miller, H.J. (2020). 311 service requests as indicators
+                    of neighborhood distress and opioid use disorder. <em>Scientific Reports</em>, 10, 19579.
                     <a href="https://doi.org/10.1038/s41598-020-76568-3" target="_blank">https://doi.org/10.1038/s41598-020-76568-3</a>
                 </p>
                 <p>
-                    <strong>2.</strong> Wang, L., Qian, C., Kats, P., Kontokosta, C., & Sobolevsky, S. (2017). Structure of 311 service requests as a signature 
-                    of urban location. <em>PLoS ONE</em>, 12(10), e0186314. 
+                    <strong>2.</strong> Wang, L., Qian, C., Kats, P., Kontokosta, C., & Sobolevsky, S. (2017). Structure of 311 service requests as a signature
+                    of urban location. <em>PLoS ONE</em>, 12(10), e0186314.
                     <a href="https://doi.org/10.1371/journal.pone.0186314" target="_blank">https://doi.org/10.1371/journal.pone.0186314</a>
                 </p>
             </div>
@@ -436,11 +449,11 @@ header p {
 
         <section id="data">
             <h2>Dataset</h2>
-            
+
             <h4>About the Data</h4>
             <p>
-                Our analysis uses Boston's publicly available 311 service request records from the City of Boston Open Data portal containing 
-                approximately <strong>226,000 closed cases</strong> across <strong>2 complete calendar years</strong> (2015 and 2025). Each 
+                Our analysis uses Boston's publicly available 311 service request records from the City of Boston Open Data portal containing
+                approximately <strong>226,000 closed cases</strong> across <strong>2 complete calendar years</strong> (2015 and 2025). Each
                 record includes case metadata, geographic coordinates, timestamps, and neighborhood classifications.
             </p>
 
@@ -461,16 +474,16 @@ header p {
 
             <h4>Data Processing</h4>
             <p>
-                We filtered both datasets to closed cases only and excluded categories less relevant to neighborhood condition assessment: parking 
-                enforcement, routine recycling, street cleaning, graffiti removal, animal control, abandoned vehicle enforcement, and traffic signal 
-                maintenance. The 11% reduction in filtered requests despite population growth may reflect improved municipal responsiveness, evolving 
+                We filtered both datasets to closed cases only and excluded categories less relevant to neighborhood condition assessment: parking
+                enforcement, routine recycling, street cleaning, graffiti removal, animal control, abandoned vehicle enforcement, and traffic signal
+                maintenance. The 11% reduction in filtered requests despite population growth may reflect improved municipal responsiveness, evolving
                 civic engagement patterns, or migration to alternative reporting platforms.
             </p>
 
             <h4>Supplementary Data</h4>
             <p>
-                We integrated American Community Survey (ACS) 5-Year estimates (2019-2023) providing census tract-level socioeconomic indicators 
-                (population, median household income, poverty rates). Geographic assignment via spatial join enables validation of 311 patterns 
+                We integrated American Community Survey (ACS) 5-Year estimates (2019-2023) providing census tract-level socioeconomic indicators
+                (population, median household income, poverty rates). Geographic assignment via spatial join enables validation of 311 patterns
                 against demographic context, following Wang et al.'s methodology.
             </p>
         </section>
@@ -478,7 +491,7 @@ header p {
         <section id="viz">
             <h2>Visualizations</h2>
             <p style="text-align: center; color: #6c757d; margin-bottom: 3rem;">
-                Seven interactive and static visualizations explore neighborhood change from multiple perspectives
+                Seven visualizations move from decade-level change, to spatial and neighborhood differences, to validation
             </p>
 
             <!-- Figure 1 -->
@@ -487,18 +500,18 @@ header p {
                 <div class="viz-meta">
                     <strong>Goal:</strong> Identify which Boston neighborhoods changed most dramatically over the decade
                 </div>
-                
+
                 <img src="figures/signature_drift.png" alt="Signature drift analysis">
-                
+
                 <div class="takeaway">
-                    <strong>Takeaway:</strong> East Boston, South Boston/Waterfront, and South Boston show the highest drift values-consistent 
+                    <strong>Takeaway:</strong> East Boston, South Boston/Waterfront, and South Boston show the highest drift values, consistent
                     with rapid Seaport development and gentrification. The median line helps identify neighborhoods experiencing above-average transformation.
                 </div>
-                
+
                 <div class="design-note">
-                    <strong>Design Choices:</strong> Neighborhoods rank-ordered by drift magnitude for immediate pattern recognition. Color gradient 
-                    (red = high change, green = low change) provides intuitive visual encoding. Cosine distance on y-axis quantifies compositional 
-                    change independent of request volume.
+                    <strong>Design Choices:</strong> Neighborhoods rank-ordered by drift magnitude for immediate pattern recognition. The median
+                    reference line separates above- and below-typical change. Cosine distance on y-axis quantifies compositional change independent
+                    of request volume.
                 </div>
             </div>
 
@@ -508,12 +521,12 @@ header p {
                 <div class="viz-meta">
                     <strong>Goal:</strong> Compare spatial distribution of 311 requests across the decade
                 </div>
-                
+
                 <div class="how-to-use">
-                    <strong>How to use:</strong> Click markers to view case details. Zoom and pan to explore specific areas. 
+                    <strong>How to use:</strong> Click markers to view case details. Zoom and pan to explore specific areas.
                     For advanced filtering, run <code>python map_app.py</code> locally.
                 </div>
-                
+
                 <div style="display: flex; gap: 1rem;">
                     <div style="flex: 1;">
                         <h4 style="text-align: center; margin-bottom: 0.5rem;">2015</h4>
@@ -524,112 +537,116 @@ header p {
                         <iframe src="figures/map_2025.html" width="100%" height="500" frameborder="0" style="border: 1px solid #dee2e6;"></iframe>
                     </div>
                 </div>
-                
+
+                <div class="link-row">
+                    <a href="figures/map_2015.html" target="_blank">Open 2015 map in a separate page</a>
+                    <a href="figures/map_2025.html" target="_blank">Open 2025 map in a separate page</a>
+                </div>
+
                 <div class="takeaway">
-                    <strong>Takeaway:</strong> Request density patterns reveal geographic clustering in high-traffic neighborhoods. 
+                    <strong>Takeaway:</strong> Request density patterns reveal geographic clustering in high-traffic neighborhoods.
                     Marker clustering enables exploration of spatial distributions while maintaining performance with thousands of data points.
                 </div>
-                
+
                 <div class="design-note">
-                    <strong>Design Choices:</strong> Side-by-side layout enables direct temporal comparison. Marker clustering groups nearby 
+                    <strong>Design Choices:</strong> Side-by-side layout enables direct temporal comparison. Marker clustering groups nearby
                     requests automatically. Folium provides interactive pan/zoom with clickable popups for case details.
                 </div>
             </div>
 
             <!-- Figure 3 -->
             <div class="visualization">
-                <h3>3 · Neighborhood Request Composition Analysis</h3>
+                <h3>3 · Neighborhood Cluster Profiles</h3>
                 <div class="viz-meta">
-                    <strong>Goal:</strong> Show how different neighborhoods prioritize different types of service requests
+                    <strong>Goal:</strong> Show how neighborhoods group by similar 311 request signatures in 2015 and 2025
                 </div>
-                
+
                 <div class="how-to-use">
-                    <strong>How to use:</strong> Hover over bars to see exact request counts. Blue = 2015, Orange = 2025. 
-                    Compare patterns across the six highest-volume neighborhoods.
+                    <strong>How to use:</strong> Hover over bars to see the neighborhoods assigned to each cluster. The 2015 and 2025 panels
+                    are clustered separately so changes in cluster membership can be compared.
                 </div>
-                
-                <iframe src="figures/composition_bars.html" width="100%" height="1450" frameborder="0" style="border: 1px solid #dee2e6;"></iframe>
-                
+
+                <iframe src="figures/cluster_profiles_2015.html" width="100%" height="1150px" frameborder="0"></iframe>
+                <iframe src="figures/cluster_profiles_2025.html" width="100%" height="1050px" frameborder="0"></iframe>
+
                 <div class="takeaway">
-                    <strong>Takeaway:</strong> Neighborhoods show distinct request profiles. Some prioritize trash/recycling complaints while 
-                    others focus on infrastructure issues. Year-over-year shifts reveal changing neighborhood priorities and conditions.
+                    <strong>Takeaway:</strong> Running clustering separately by year shows how the structure of neighborhood complaint profiles
+                    changed, not just how total volume changed. Neighborhoods can move toward different service-signature groups over time.
                 </div>
-                
+
                 <div class="design-note">
-                    <strong>Design Choices:</strong> Horizontal bars make long request-type names readable. Grouped bars (not stacked) enable 
-                    direct count comparison. Color legend clearly distinguishes years. Top 5 request types per neighborhood focus on dominant patterns.
+                    <strong>Design Choices:</strong> K-means with k=4 follows Wang et al.'s Boston methodology. Separate yearly profiles make
+                    cluster interpretation possible before comparing membership changes. Hover text lists the neighborhoods in each cluster.
                 </div>
             </div>
 
             <!-- Figure 4 -->
             <div class="visualization">
-                <h3>4 · Interactive Neighborhood Request Pattern Comparison</h3>
+                <h3>4 · Neighborhood Request Composition Analysis</h3>
                 <div class="viz-meta">
-                    <strong>Goal:</strong> Enable detailed exploration of individual neighborhood request patterns · Altair
+                    <strong>Goal:</strong> Show how different neighborhoods prioritize different types of service requests
                 </div>
-                
+
                 <div class="how-to-use">
-                    <strong>How to use:</strong> Select any neighborhood from the dropdown. Click the legend (2015/2025) to toggle years on/off. 
-                    Hover for exact counts. Request types appear alphabetically.
+                    <strong>How to use:</strong> Hover over bars to see exact request counts. Blue = 2015, Orange = 2025.
+                    Compare patterns across the six highest-volume neighborhoods.
                 </div>
-                
-                <iframe src="interactive_neighborhood_comparison.html" width="100%" height="750" frameborder="0" style="border: 1px solid #dee2e6;"></iframe>
-                
+
+                <iframe src="figures/composition_bars.html" width="100%" height="1450" frameborder="0" style="border: 1px solid #dee2e6;"></iframe>
+
                 <div class="takeaway">
-                    <strong>Takeaway:</strong> Enables granular examination of how specific neighborhoods' complaint profiles evolved. 
-                    Alphabetical sorting makes finding specific request types quick. Toggle functionality allows focusing on single-year patterns.
+                    <strong>Takeaway:</strong> Neighborhoods show distinct request profiles. Some prioritize trash/recycling complaints while
+                    others focus on infrastructure issues. Year-over-year shifts reveal changing neighborhood priorities and conditions.
                 </div>
-                
+
                 <div class="design-note">
-                    <strong>Design Choices:</strong> Dropdown selection reduces visual clutter while maintaining access to all neighborhoods. 
-                    Grouped bars with vertical offset prevent overlap. Legend-based filtering provides intuitive year comparison control.
+                    <strong>Design Choices:</strong> Horizontal bars make long request-type names readable. Grouped bars (not stacked) enable
+                    direct count comparison. Color legend clearly distinguishes years. Top 5 request types per neighborhood focus on dominant patterns.
                 </div>
             </div>
 
             <!-- Figure 5 -->
             <div class="visualization">
-                <h3>5 · Seasonal Patterns in 311 Requests</h3>
+                <h3>5 · Interactive Neighborhood Request Pattern Comparison</h3>
                 <div class="viz-meta">
-                    <strong>Goal:</strong> Reveal temporal patterns and seasonal variations in request types
+                    <strong>Goal:</strong> Enable detailed exploration of individual neighborhood request patterns · Altair
                 </div>
-                
-                <img src="figures/monthly_heatmap.png" alt="Monthly heatmap visualization">
-                
+
+                <div class="how-to-use">
+                    <strong>How to use:</strong> Select any neighborhood from the dropdown. Click the legend (2015/2025) to toggle years on/off.
+                    Hover for exact counts. Request types appear alphabetically.
+                </div>
+
+                <iframe src="interactive_neighborhood_comparison.html" width="100%" height="750" frameborder="0" style="border: 1px solid #dee2e6;"></iframe>
+
                 <div class="takeaway">
-                    <strong>Takeaway:</strong> Snow removal requests spike dramatically in winter months (expected), while infrastructure 
-                    issues like street lighting and potholes remain relatively consistent year-round. Temporal consistency across the decade 
-                    suggests core municipal service demands persist despite neighborhood transformations.
+                    <strong>Takeaway:</strong> Enables granular examination of how specific neighborhoods' complaint profiles evolved.
+                    Alphabetical sorting makes finding specific request types quick. Toggle functionality allows focusing on single-year patterns.
                 </div>
-                
+
                 <div class="design-note">
-                    <strong>Design Choices:</strong> Heatmap format efficiently displays 3 dimensions (request type × month × count). 
-                    Sequential colormap (YlOrRd) intuitively encodes intensity. Side-by-side comparison highlights decade-long changes in seasonal patterns.
+                    <strong>Design Choices:</strong> Dropdown selection reduces visual clutter while maintaining access to all neighborhoods.
+                    Grouped bars with vertical offset prevent overlap. Legend-based filtering provides intuitive year comparison control.
                 </div>
             </div>
 
             <!-- Figure 6 -->
             <div class="visualization">
-                <h3>6 · Cluster Distribution Comparison</h3>
+                <h3>6 · Seasonal Patterns in 311 Requests</h3>
                 <div class="viz-meta">
-                    <strong>Goal:</strong> Show how neighborhoods group by similar 311 request patterns using k-means clustering
+                    <strong>Goal:</strong> Reveal temporal patterns and seasonal variations in request types
                 </div>
-                
-                <div class="how-to-use">
-                    <strong>How to use:</strong> Hover over bars to see exact neighborhood counts per cluster. Compare how cluster sizes 
-                    changed between 2015 and 2025.
-                </div>
-                
-                <iframe src="figures/cluster_profiles_2015.html" width="100%" height="1150px" frameborder="0"></iframe>
-                <iframe src="figures/cluster_profiles_2025.html" width="100%" height="1050px" frameborder="0"></iframe>
-                
+
+                <img src="figures/monthly_heatmap.png" alt="Monthly heatmap visualization">
+
                 <div class="takeaway">
-                    <strong>Takeaway:</strong> Neighborhood redistribution across clusters indicates systematic reorganization of Boston's 
-                    service request landscape. Some clusters grew while others shrank, reflecting citywide demographic and economic transitions.
+                    <strong>Takeaway:</strong> Winter service requests spike as expected, but the sharp shift between snow plowing and unshoveled
+                    sidewalk categories should be read partly as a 311 taxonomy/reporting change, not purely as a behavioral or infrastructure change.
                 </div>
-                
+
                 <div class="design-note">
-                    <strong>Design Choices:</strong> K-means with k=4 follows Wang et al.'s Boston methodology. Side-by-side bars enable 
-                    direct cluster size comparison. Consistent cluster colors maintain identity across years.
+                    <strong>Design Choices:</strong> Heatmap format efficiently displays 3 dimensions (request type × month × count).
+                    Sequential colormap (YlOrRd) intuitively encodes intensity. Side-by-side comparison highlights decade-long changes in seasonal patterns.
                 </div>
             </div>
 
@@ -639,32 +656,32 @@ header p {
                 <div class="viz-meta">
                     <strong>Goal:</strong> Validate neighborhood patterns with tract-level census data · D3.js
                 </div>
-                
+
                 <div class="how-to-use">
-                    <strong>How to use:</strong> Use the dropdown to switch y-axis metrics. Hover for tract details. Click a point to pin 
-                    the highlight. Point size = population, color = median income.
+                    <strong>How to use:</strong> Use the dropdowns to switch x-axis and y-axis metrics. Hover for tract details. Click a point
+                    to pin the highlight. Point size = population, color = median income.
                 </div>
-                
+
                 <iframe src="figures/tract_d3_scatter.html" width="100%" height="700" frameborder="0" style="border: 1px solid #dee2e6;"></iframe>
-                
+
                 <div class="takeaway">
-                    <strong>Takeaway:</strong> Poverty rate shows weak positive correlation (r = 0.13) with complaint change. Modest tract-level 
-                    associations suggest 311 captures some socioeconomic structure but shouldn't be interpreted as definitive causal evidence.
+                    <strong>Takeaway:</strong> Poverty rate has only a weak relationship with complaint change. Median household income is also
+                    available as an x-axis predictor; its clearest relationship is with 2025 complaints per 1k residents, not decade-over-decade change.
                 </div>
-                
+
                 <div class="design-note">
-                    <strong>Design Choices:</strong> Switchable y-axis metrics enable exploration of multiple relationships in one chart. 
-                    Point size and color encode additional dimensions (population, income). Click-to-pin functionality supports detailed inspection.
+                    <strong>Design Choices:</strong> Switchable x-axis and y-axis metrics enable exploration of both poverty and income relationships.
+                    The fitted regression line and r label highlight the trend strength without implying causality.
                 </div>
             </div>
         </section>
 
         <section id="findings">
             <h2>Conclusion</h2>
-            
+
             <h4>What We Learned</h4>
             <p>
-                Boston's 311 request patterns reveal that neighborhood change is not evenly distributed. The strongest signal comes from changes 
+                Boston's 311 request patterns reveal that neighborhood change is not evenly distributed. The strongest signal comes from changes
                 in complaint composition and neighborhood structure rather than simple volume trends or single tract-level correlations.
             </p>
 
@@ -672,7 +689,7 @@ header p {
                 <div class="finding-box">
                     <h4>Uneven Transformation</h4>
                     <p>
-                        East Boston, South Boston/Waterfront, and South Boston show especially large signature shifts-consistent with rapid 
+                        East Boston, South Boston/Waterfront, and South Boston show especially large signature shifts, consistent with rapid
                         Seaport development and gentrification pressures documented in these areas.
                     </p>
                 </div>
@@ -680,23 +697,23 @@ header p {
                 <div class="finding-box">
                     <h4>Declining Volume</h4>
                     <p>
-                        11% reduction in requests despite population growth may indicate improved municipal responsiveness, shifting engagement 
+                        11% reduction in requests despite population growth may indicate improved municipal responsiveness, shifting engagement
                         patterns, or migration to alternative reporting channels.
                     </p>
                 </div>
 
                 <div class="finding-box">
-                    <h4>Seasonal Stability</h4>
+                    <h4>Seasonal and Taxonomy Effects</h4>
                     <p>
-                        Core service demands (snow removal, potholes, street lighting) show remarkable temporal consistency, suggesting 
-                        fundamental municipal needs persist despite neighborhood transformations.
+                        Seasonal service needs remain visible, but some decade-level category shifts likely reflect changes in 311 reporting
+                        categories, especially snow plowing and unshoveled sidewalk requests.
                     </p>
                 </div>
 
                 <div class="finding-box">
                     <h4>Cluster Reorganization</h4>
                     <p>
-                        Neighborhood redistribution across clusters indicates systematic citywide reorganization with implications for 
+                        Neighborhood redistribution across clusters indicates systematic citywide reorganization with implications for
                         resource allocation and service delivery planning.
                     </p>
                 </div>
@@ -704,8 +721,8 @@ header p {
 
             <h4>Future Work</h4>
             <p>
-                Future analysis could incorporate additional years between 2015-2025, response-time metrics, and cross-referencing with housing, 
-                zoning, or transit development data to distinguish whether shifts reflect demographic turnover, infrastructure investment, or 
+                Future analysis could incorporate additional years between 2015-2025, response-time metrics, and cross-referencing with housing,
+                zoning, or transit development data to distinguish whether shifts reflect demographic turnover, infrastructure investment, or
                 changing reporting behavior.
             </p>
         </section>

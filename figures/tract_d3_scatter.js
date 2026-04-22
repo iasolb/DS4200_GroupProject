@@ -11,6 +11,7 @@ const root = svg.append('g')
     .attr('transform', `translate(${margin.left},${margin.top})`);
 
 const tooltip = d3.select('#tooltip');
+const xMetricSelect = d3.select('#x-metric-select');
 const metricSelect = d3.select('#metric-select');
 const metaLine = d3.select('#meta-line');
 
@@ -47,6 +48,23 @@ const incomeScale = d3.scaleLinear()
     .range(['#c6dbef', '#6b9ecf', '#1f4e79'])
     .interpolate(d3.interpolateRgb);
 
+const xMetricConfig = {
+    poverty_rate: {
+        label: 'Poverty rate',
+        accessor: d => d.povertyRate,
+        format: d => formatPercent(d),
+        min: 0,
+        max: 1,
+        pad: 0.02,
+    },
+    median_household_income: {
+        label: 'Median household income',
+        accessor: d => d.income,
+        format: d => formatIncome(d),
+        padRatio: 0.08,
+    },
+};
+
 const xGrid = root.append('g').attr('class', 'grid').attr('transform', `translate(0,${height})`);
 const yGrid = root.append('g').attr('class', 'grid');
 const xAxis = root.append('g').attr('class', 'axis').attr('transform', `translate(0,${height})`);
@@ -54,14 +72,13 @@ const yAxis = root.append('g').attr('class', 'axis');
 
 const plot = root.append('g');
 
-root.append('text')
+const xLabel = root.append('text')
     .attr('x', width / 2)
     .attr('y', height + 52)
     .attr('text-anchor', 'middle')
     .attr('font-size', 14)
     .attr('font-weight', 600)
-    .attr('fill', '#2c3e50')
-    .text('Poverty rate');
+    .attr('fill', '#2c3e50');
 
 const yLabel = root.append('text')
     .attr('transform', 'rotate(-90)')
@@ -73,6 +90,7 @@ const yLabel = root.append('text')
     .attr('fill', '#2c3e50');
 
 let data = [];
+let selectedXMetric = xMetricSelect.property('value');
 let selectedMetric = metricSelect.property('value');
 let pinnedId = null;
 
@@ -100,41 +118,76 @@ function preprocess(rows) {
     }).filter(row => Number.isFinite(row.population) && Number.isFinite(row.income));
 }
 
-function renderMeta(config, valueAccessor) {
+function renderMeta(xConfig, yConfig, xAccessor, yAccessor, r) {
     const selected = pinnedId ? data.find(d => d.GEO_ID === pinnedId) : null;
 
     if (!selected) {
         metaLine.html(`
             <div><strong>Source:</strong> data/census_tract_ses_2023_with_311.csv</div>
             <div><strong>Observations:</strong> ${formatNumber(data.length)} tracts</div>
-            <div><strong>Mean ${config.label}:</strong> ${config.format(d3.mean(data, valueAccessor))}</div>
+            <div><strong>Mean ${yConfig.label}:</strong> ${yConfig.format(d3.mean(data, yAccessor))}</div>
+            <div><strong>Regression r:</strong> ${d3.format('.2f')(r)}</div>
             <div><strong>Click:</strong> pin a tract</div>
         `);
         return;
     }
 
+    const povertyLine = selectedXMetric === 'poverty_rate'
+        ? ''
+        : `<div><strong>Poverty rate:</strong> ${formatPercent(selected.povertyRate)}</div>`;
+    const incomeLine = selectedXMetric === 'median_household_income'
+        ? ''
+        : `<div><strong>Median income:</strong> ${formatIncome(selected.income)}</div>`;
+
     metaLine.html(`
         <div><strong>Selected tract:</strong> ${selected.label}</div>
-        <div><strong>Poverty rate:</strong> ${formatPercent(selected.povertyRate)}</div>
-        <div><strong>${config.label}:</strong> ${config.format(valueAccessor(selected))}</div>
-        <div><strong>Median income:</strong> ${formatIncome(selected.income)}</div>
+        <div><strong>${xConfig.label}:</strong> ${xConfig.format(xAccessor(selected))}</div>
+        ${povertyLine}
+        <div><strong>${yConfig.label}:</strong> ${yConfig.format(yAccessor(selected))}</div>
+        ${incomeLine}
         <div><strong>Population:</strong> ${formatNumber(selected.population)}</div>
     `);
+}
+
+function tooltipHtml(d, xConfig, yConfig, xAccessor, yAccessor) {
+    const context = [
+        `<strong>${d.label}</strong>`,
+        `${xConfig.label}: ${xConfig.format(xAccessor(d))}`,
+    ];
+
+    if (selectedXMetric !== 'poverty_rate') {
+        context.push(`Poverty rate: ${formatPercent(d.povertyRate)}`);
+    }
+
+    context.push(`${yConfig.label}: ${yConfig.format(yAccessor(d))}`);
+
+    if (selectedXMetric !== 'median_household_income') {
+        context.push(`Median income: ${formatIncome(d.income)}`);
+    }
+
+    context.push(`Population: ${formatNumber(d.population)}`);
+    return context.join('<br>');
 }
 
 function render() {
     if (!data.length) return;
 
-    const config = metricConfig[selectedMetric];
-    const valueAccessor = config.accessor;
-    const xDomain = d3.extent(data, d => d.povertyRate);
-    const yDomain = d3.extent(data, valueAccessor);
+    const xConfig = xMetricConfig[selectedXMetric];
+    const yConfig = metricConfig[selectedMetric];
+    const xAccessor = xConfig.accessor;
+    const yAccessor = yConfig.accessor;
+    const xDomain = d3.extent(data, xAccessor);
+    const yDomain = d3.extent(data, yAccessor);
+    const xPad = xConfig.pad ?? (((xDomain[1] - xDomain[0]) * xConfig.padRatio) || 1);
     const yPad = ((yDomain[1] - yDomain[0]) * 0.12) || 1;
 
-    xScale.domain([Math.max(0, xDomain[0] - 0.02), Math.min(1, xDomain[1] + 0.02)]);
+    xScale.domain([
+        xConfig.min === undefined ? xDomain[0] - xPad : Math.max(xConfig.min, xDomain[0] - xPad),
+        xConfig.max === undefined ? xDomain[1] + xPad : Math.min(xConfig.max, xDomain[1] + xPad),
+    ]).nice();
     yScale.domain([
-        Math.min(config.domain[0], yDomain[0] - yPad),
-        Math.max(config.domain[1], yDomain[1] + yPad),
+        Math.min(yConfig.domain[0], yDomain[0] - yPad),
+        Math.max(yConfig.domain[1], yDomain[1] + yPad),
     ]).nice();
     radiusScale.domain(d3.extent(data, d => d.population));
     const incomeValues = data.map(d => d.income).filter(Number.isFinite).sort(d3.ascending);
@@ -144,21 +197,22 @@ function render() {
         d3.max(incomeValues),
     ]);
 
-    xAxis.call(d3.axisBottom(xScale).tickFormat(formatPercent).ticks(8));
+    xAxis.call(d3.axisBottom(xScale).tickFormat(xConfig.format).ticks(8));
     yAxis.call(d3.axisLeft(yScale).ticks(8));
     xGrid.call(d3.axisBottom(xScale).tickSize(-height).tickFormat('').ticks(8));
     yGrid.call(d3.axisLeft(yScale).tickSize(-width).tickFormat('').ticks(8));
-    yLabel.text(config.label);
+    xLabel.text(xConfig.label);
+    yLabel.text(yConfig.label);
 
     // --- Regression line ---
     const validData = data.filter(d =>
-        Number.isFinite(d.povertyRate) && Number.isFinite(valueAccessor(d))
+        Number.isFinite(xAccessor(d)) && Number.isFinite(yAccessor(d))
     );
-    const meanX = d3.mean(validData, d => d.povertyRate);
-    const meanY = d3.mean(validData, valueAccessor);
-    const ssXY = d3.sum(validData, d => (d.povertyRate - meanX) * (valueAccessor(d) - meanY));
-    const ssXX = d3.sum(validData, d => (d.povertyRate - meanX) ** 2);
-    const ssYY = d3.sum(validData, d => (valueAccessor(d) - meanY) ** 2);
+    const meanX = d3.mean(validData, xAccessor);
+    const meanY = d3.mean(validData, yAccessor);
+    const ssXY = d3.sum(validData, d => (xAccessor(d) - meanX) * (yAccessor(d) - meanY));
+    const ssXX = d3.sum(validData, d => (xAccessor(d) - meanX) ** 2);
+    const ssYY = d3.sum(validData, d => (yAccessor(d) - meanY) ** 2);
     const slope = ssXX !== 0 ? ssXY / ssXX : 0;
     const intercept = meanY - slope * meanX;
     const r = ssXX > 0 && ssYY > 0 ? ssXY / Math.sqrt(ssXX * ssYY) : 0;
@@ -204,7 +258,7 @@ function render() {
 
     points.join(
         enter => enter.append('circle')
-            .attr('cx', d => xScale(d.povertyRate))
+            .attr('cx', d => xScale(xAccessor(d)))
             .attr('cy', height)
             .attr('r', 0)
             .attr('fill', d => incomeScale(d.income))
@@ -214,13 +268,7 @@ function render() {
             .on('mouseenter', function (event, d) {
                 if (pinnedId && pinnedId !== d.GEO_ID) return;
                 d3.select(this).attr('stroke', '#1a1a1a').attr('stroke-width', 2.5);
-                tooltip.style('opacity', 1).html(`
-                    <strong>${d.label}</strong><br>
-                    Poverty rate: ${formatPercent(d.povertyRate)}<br>
-                    ${config.label}: ${config.format(valueAccessor(d))}<br>
-                    Median income: ${formatIncome(d.income)}<br>
-                    Population: ${formatNumber(d.population)}
-                `);
+                tooltip.style('opacity', 1).html(tooltipHtml(d, xConfig, yConfig, xAccessor, yAccessor));
             })
             .on('mousemove', function (event) {
                 tooltip.style('left', `${event.pageX + 16}px`).style('top', `${event.pageY - 18}px`);
@@ -235,7 +283,7 @@ function render() {
                 if (pinnedId === d.GEO_ID) {
                     pinnedId = null;
                     plot.selectAll('circle').classed('highlight', false).attr('opacity', 0.84);
-                    renderMeta(config, valueAccessor);
+                    renderMeta(xConfig, yConfig, xAccessor, yAccessor, r);
                     tooltip.style('opacity', 0);
                     return;
                 }
@@ -243,30 +291,33 @@ function render() {
                 plot.selectAll('circle')
                     .classed('highlight', node => node.GEO_ID === d.GEO_ID)
                     .attr('opacity', node => node.GEO_ID === d.GEO_ID ? 1 : 0.18);
-                tooltip.style('opacity', 1).html(`
-                    <strong>${d.label}</strong><br>
-                    Poverty rate: ${formatPercent(d.povertyRate)}<br>
-                    ${config.label}: ${config.format(valueAccessor(d))}<br>
-                    Median income: ${formatIncome(d.income)}<br>
-                    Population: ${formatNumber(d.population)}
-                `);
-                renderMeta(config, valueAccessor);
+                tooltip.style('opacity', 1).html(tooltipHtml(d, xConfig, yConfig, xAccessor, yAccessor));
+                renderMeta(xConfig, yConfig, xAccessor, yAccessor, r);
             })
             .call(enter => enter.transition().duration(700)
-                .attr('cx', d => xScale(d.povertyRate))
-                .attr('cy', d => yScale(valueAccessor(d)))
+                .attr('cx', d => xScale(xAccessor(d)))
+                .attr('cy', d => yScale(yAccessor(d)))
                 .attr('r', d => radiusScale(d.population))),
         update => update.transition().duration(700)
-            .attr('cx', d => xScale(d.povertyRate))
-            .attr('cy', d => yScale(valueAccessor(d)))
+            .attr('cx', d => xScale(xAccessor(d)))
+            .attr('cy', d => yScale(yAccessor(d)))
             .attr('r', d => radiusScale(d.population))
             .attr('fill', d => incomeScale(d.income))
             .attr('opacity', d => pinnedId && d.GEO_ID !== pinnedId ? 0.18 : 0.84),
         exit => exit.transition().duration(200).attr('r', 0).remove()
     );
 
-    renderMeta(config, valueAccessor);
+    renderMeta(xConfig, yConfig, xAccessor, yAccessor, r);
 }
+
+xMetricSelect.on('change', function () {
+    selectedXMetric = this.value;
+    if (pinnedId) {
+        pinnedId = null;
+        plot.selectAll('circle').classed('highlight', false).attr('opacity', 0.84);
+    }
+    render();
+});
 
 metricSelect.on('change', function () {
     selectedMetric = this.value;
