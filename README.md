@@ -37,5 +37,5 @@ The site includes seven figures, listed in full below:
 
 ## Start here
 
-View the live site at https://iasolb.github.io/DS4200_GroupProject/, or run
-`map_app.py` locally to explore the geographic maps.
+View the live site at http://iansolberg.us/311-Requests-Analysis-Boston/, or
+run `map_app.py` locally to explore the geographic maps.
