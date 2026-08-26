@@ -1,30 +1,41 @@
+Authors: Anthony Campos, Cassandra Cinzori, and Ian Solberg
+
 # Mapping Urban Change Through 311 Service Requests
 
-**Anthony Campos, Cassandra Cinzori, Ian Solberg**  
-DS4200: Information Presentation and Data Visualization - Northeastern University, Spring 2026
- 
-[View the live site](https://iasolb.github.io/DS4200_GroupProject/)
+How Boston neighborhoods changed between 2015 and 2025, read through the 311
+service requests residents file for potholes, broken street lights, and missed
+trash pickups. A DS4200: Information Presentation and Data Visualization
+project (Northeastern University, Spring 2026) with a live interactive site.
 
----
+## What it does
 
-## Overview
+Analyzes over 226,000 cleaned service requests across both years, groups
+neighborhoods by their "complaint signature" (the relative frequency of each
+request type), and measures how far those signatures drifted between 2015 and
+2025. A separate tract-level analysis cross-references complaint patterns with
+U.S. Census socioeconomic data to validate the findings.
 
-This project examines how Boston neighborhoods transformed between 2015 and 2025 through the lens of municipal 311 service request patterns. Residents file 311 requests to report non-emergency issues like potholes, broken street lights, and missed trash pickups. By analyzing how the mix of these complaints shifted over a decade, we identify which neighborhoods changed most dramatically - and what that might say about gentrification, infrastructure investment, and urban change.
+## What it found
 
-We analyze over 226,000 cleaned service requests across both years, grouping neighborhoods by their "complaint signature" (the relative frequency of each request type) and measuring how much those signatures drifted between 2015 and 2025. A separate tract-level analysis cross-references complaint patterns with U.S. Census socioeconomic data to validate our findings.
-
-## What We Found
-
-East Boston, South Boston, and the South Boston Waterfront show the highest signature drift - consistent with their well-documented rapid development and demographic shifts over the past decade. Meanwhile, seasonal patterns in core infrastructure requests (snow plowing, potholes, street lights) remained remarkably stable citywide, suggesting that fundamental service demands persist even as neighborhood character evolves.
+East Boston, South Boston, and the South Boston Waterfront show the highest
+signature drift, consistent with their well-documented rapid development and
+demographic shifts over the decade. Seasonal patterns in core infrastructure
+requests (snow plowing, potholes, street lights) stayed remarkably stable
+citywide, so fundamental service demand persists even as neighborhoods change.
 
 ## Visualizations
 
-The site includes seven figures:
+The site includes seven figures, listed in full below:
 
-1. **Seasonal Patterns** - Heatmap of monthly request volumes by type for 2015 and 2025
-2. **Neighborhood Composition** - Interactive grouped bars comparing the top request types across Boston's busiest neighborhoods
-3. **Signature Drift** - Bar chart ranking neighborhoods by how much their complaint profile changed
-4. **Cluster Profiles** - How neighborhoods group by similar complaint patterns, and how those groups shifted
-5. **Interactive Neighborhood Explorer** - Dropdown to explore any neighborhood's request breakdown year over year
-6. **Tract-Level Validation** - D3 scatter plot comparing census tract poverty rates with complaint change
-7. **Geographic Map** - Side-by-side interactive maps (run locally via `map_app.py`)
+1. Seasonal Patterns - heatmap of monthly request volumes by type, 2015 and 2025
+2. Neighborhood Composition - interactive grouped bars of top request types across busiest neighborhoods
+3. Signature Drift - bar chart ranking neighborhoods by complaint-profile change
+4. Cluster Profiles - how neighborhoods group by similar complaint patterns, and how groups shifted
+5. Interactive Neighborhood Explorer - dropdown for any neighborhood's year-over-year breakdown
+6. Tract-Level Validation - D3 scatter plot of census tract poverty rates vs. complaint change
+7. Geographic Map - side-by-side interactive maps (run locally via `map_app.py`)
+
+## Start here
+
+View the live site at http://iansolberg.us/311-Requests-Analysis-Boston/, or
+run `map_app.py` locally to explore the geographic maps.
